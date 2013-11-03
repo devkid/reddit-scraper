@@ -106,18 +106,17 @@ json["data"]["children"].each do |link|
 	path = $dir + "/" + $options[:prefix] + id
 	
 	# extract resolution
-	res = title.scan(/[\[|\(]\s?(\d+)\s?[x|×|X]\s?(\d+)\s?[\]|\)]/).first
+	res = title.scan(/[\[|\(]\s?(\d+)\s?[x|×|X]\s?(\d+)\s?[\]|\)]/)
 	if res.empty? then
 		next
 	end
-	x   = res[0].to_i
-	y   = res[1].to_i
+	x   = res[0][0].to_i
+	y   = res[0][1].to_i
 	
 	ratio = x.to_f / y
-	if $options[:ratiomin] != nil and ratio < $options[:ratiomin] then
-		next
-	end
-	if $options[:ratiomax] != nil and ratio > $options[:ratiomax] then
+	if x < $options[:minx] or y < $options[:miny] or
+	   ($options[:ratiomin] != nil and ratio < $options[:ratiomin]) or
+	   ($options[:ratiomax] != nil and ratio > $options[:ratiomax]) then
 		next
 	end
 	
